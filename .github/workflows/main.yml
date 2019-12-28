@@ -9,5 +9,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
     - name: shellcheck
       uses: ludeeus/action-shellcheck@0.1.0
+    
+    - name: Build Docker image
+      run: docker build .
