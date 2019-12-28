@@ -3,16 +3,20 @@
 set -e
 set -o errexit
 
-echo "$1" | docker login docker.pkg.github.com -u "$GITHUB_ACTOR" --password-stdin
+echo "$INPUT_DOCKER_PASSWORD" | docker login "$INPUT_DOCKER_SERVER" -u "${INPUT_DOCKER_USERNAME:-$GITHUB_ACTOR}" --password-stdin
 
-IMAGE_NAME=$(basename "$GITHUB_REPOSITORY")
-IMAGE_ID="docker.pkg.github.com/$GITHUB_REPOSITORY/$IMAGE_NAME"
-VERSION=$(basename "$GITHUB_REF")
+REPO_NAME=$(basename "$GITHUB_REPOSITORY")
+IMAGE_NAME="${INPUT_IMAGE_NAME:-$REPO_NAME}"
+IMAGE_PATH="${INPUT_IMAGE_PATH:-$GITHUB_REPOSITORY}"
+IMAGE_ID="docker.pkg.github.com/$IMAGE_PATH/$IMAGE_NAME"
 
-if [ "$VERSION" = "master" ]
+INFERRED_IMAGE_TAG=$(basename "$GITHUB_REF")
+if [ "$INFERRED_IMAGE_TAG" = "master" ]
 then
-    VERSION=latest
+    INFERRED_IMAGE_TAG=latest
 fi
 
-docker build -t "$IMAGE_ID:$VERSION" .
-docker push "$IMAGE_ID:$VERSION"
+IMAGE_TAG="${INPUT_IMAGE_TAG:-$INFERRED_IMAGE_TAG}"
+
+docker build -t "$IMAGE_ID:$IMAGE_TAG" .
+docker push "$IMAGE_ID:$IMAGE_TAG"

@@ -1,12 +1,26 @@
 name: 'Push Docker image to GitHub Package Registry'
 description: 'Builds, tags, and pushes a Docker image as a GitHub Package associated with the repository'
 inputs:
-  github_token:
-    description: 'Token to perform actions with the GitHub API (use secrets.GITHUB_TOKEN)'
+  docker_server:
+    description: 'Server to log into with docker login'
     required: true
+    default: 'hub.docker.com'
+  docker_username:
+    description: 'Username to log in with using docker login (uses $GITHUB_ACTOR if not specified)'
+    required: false
+  docker_password:
+    description: 'Password to log in with using docker login'
+    required: true
+  image_path:
+    description: 'Path under which to push the image (defaults to OWNER/REPO)'
+    required: false
+  image_name:
+    description: 'Unqualified image name to tag (defaults to repository name)'
+    required: false
+  image_tag:
+    description: 'Tag to apply to the image before pushing (defaults to "latest" on master, or branch/tag name otherwise)'
+    required: false
 outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.github_token }}
