@@ -9,7 +9,7 @@ IMAGE_NAME=$(basename "$GITHUB_REPOSITORY")
 IMAGE_ID="docker.pkg.github.com/$GITHUB_REPOSITORY/$IMAGE_NAME"
 VERSION=$(basename "$GITHUB_REF")
 
-if [ "$VERSION" == "master" ]
+if [ "$VERSION" = "master" ]
 then
     VERSION=latest
 fi

@@ -2,7 +2,7 @@
 FROM docker:stable AS builder
 
 RUN apk update
-RUN apk add dos2unix
+RUN apk add dos2unix shellcheck
 
 WORKDIR /root
 
