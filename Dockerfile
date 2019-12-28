@@ -15,4 +15,4 @@ FROM docker:stable
 WORKDIR /root
 
 COPY --from=builder /root/run.sh run.sh
-ENTRYPOINT [ "run.sh" ]
+ENTRYPOINT [ "./run.sh" ]
