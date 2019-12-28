@@ -1,0 +1,12 @@
+name: 'Push Docker image to GitHub Package Registry'
+description: 'Builds, tags, and pushes a Docker image as a GitHub Package associated with the repository'
+inputs:
+  github_token:
+    description: 'Token to perform actions with the GitHub API (use secrets.github_token)'
+    required: true
+outputs:
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.github_token }}
