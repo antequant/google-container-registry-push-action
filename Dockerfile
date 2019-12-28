@@ -1,33 +1,27 @@
 # Builder
-FROM ubuntu:latest AS builder
+FROM docker:stable AS builder
 
-RUN apt-get update
-RUN apt-get install -y dos2unix shellcheck wget
+RUN apk update
+RUN apk add dos2unix shellcheck wget
 
 WORKDIR /root
 
-# Prepare for installing Google Cloud SDK: https://cloud.google.com/sdk/docs/#deb
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-RUN wget -q --progress=bar:force:noscroll --show-progress https://packages.cloud.google.com/apt/doc/apt-key.gpg
+# Download Google Cloud SDK: https://cloud.google.com/sdk/docs/#linux
+RUN wget -q --progress=bar:force:noscroll --show-progress https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-274.0.1-linux-x86_64.tar.gz -O google-cloud-sdk.tar.gz
+RUN tar -xzf google-cloud-sdk.tar.gz
 
 COPY entrypoint.sh entrypoint.sh
 RUN dos2unix entrypoint.sh
 
 # Application
-FROM ubuntu:latest
+FROM docker:stable
 
-RUN apt-get update
-RUN apt-get install -y docker
+RUN apk update
+RUN apk add python2
 
-# Install Google Cloud SDK: https://cloud.google.com/sdk/docs/#deb
-COPY --from=builder /etc/apt/sources.list.d/google-cloud-sdk.list /etc/apt/sources.list.d/google-cloud-sdk.list
-RUN apt-get install -y apt-transport-https ca-certificates gnupg
-
-COPY --from=builder /root/apt-key.gpg /root/apt-key.gpg
-RUN apt-key --keyring /usr/share/keyrings/cloud.google.gpg add /root/apt-key.gpg
-
-RUN apt-get update
-RUN apt-get install -y google-cloud-sdk
+# Install Google Cloud SDK: https://cloud.google.com/sdk/docs/#linux
+COPY --from=builder /root/google-cloud-sdk /root/google-cloud-sdk
+RUN yes 'n' | /root/google-cloud-sdk/install.sh
 
 COPY --from=builder /root/entrypoint.sh /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
