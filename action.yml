@@ -6,13 +6,13 @@ inputs:
     required: true
     default: 'hub.docker.com'
   docker_username:
-    description: 'Username to log in with using docker login (uses $GITHUB_ACTOR if not specified)'
+    description: 'Username to log in with using docker login (defaults to $GITHUB_ACTOR)'
     required: false
   docker_password:
     description: 'Password to log in with using docker login'
     required: true
   image_path:
-    description: 'Path under which to push the image (defaults to OWNER/REPO)'
+    description: 'Path under which to push the image (defaults to repository owner)'
     required: false
   image_name:
     description: 'Unqualified image name to tag (defaults to repository name)'
