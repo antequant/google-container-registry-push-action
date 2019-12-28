@@ -4,7 +4,7 @@ inputs:
   docker_server:
     description: 'Server to log into with docker login'
     required: true
-    default: 'hub.docker.com'
+    default: 'https://index.docker.io/v1/'
   docker_username:
     description: 'Username to log in with using docker login (defaults to $GITHUB_ACTOR)'
     required: false
