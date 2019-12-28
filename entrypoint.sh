@@ -3,13 +3,13 @@
 set -e
 set -o errexit
 
-yes 'n' | gcloud init
+yes 'n' | $GCLOUD init
 cat > gcp_token.json <<__EOF__
 $INPUT_GCP_TOKEN
 __EOF__
 
-gcloud auth activate-service-account "$INPUT_GCP_EMAIL" --key-file gcp_token.json
-yes | gcloud auth configure-docker
+$GCLOUD auth activate-service-account "$INPUT_GCP_EMAIL" --key-file gcp_token.json
+yes | $GCLOUD auth configure-docker
 
 REPO_NAME=$(basename "$GITHUB_REPOSITORY")
 IMAGE_NAME="${INPUT_IMAGE_NAME:-$REPO_NAME}"
