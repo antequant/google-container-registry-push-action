@@ -12,7 +12,5 @@ RUN dos2unix run.sh
 # Application
 FROM docker:stable
 
-WORKDIR /root
-
-COPY --from=builder /root/run.sh run.sh
-ENTRYPOINT [ "./run.sh" ]
+COPY --from=builder /root/run.sh /root/run.sh
+ENTRYPOINT [ "/root/run.sh" ]
