@@ -14,5 +14,5 @@ then
     VERSION=latest
 fi
 
-docker tag image "$IMAGE_ID:$VERSION"
+docker build -t "$IMAGE_ID:$VERSION" .
 docker push "$IMAGE_ID:$VERSION"
