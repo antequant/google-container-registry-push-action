@@ -1,17 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 set -o errexit
 
-echo "$INPUT_DOCKER_PASSWORD" | docker login "$INPUT_DOCKER_SERVER" -u "${INPUT_DOCKER_USERNAME:-$GITHUB_ACTOR}" --password-stdin
+yes 'n' | gcloud init
+cat <<< "$INPUT_GCP_TOKEN" > gcp_token.json
+
+gcloud auth activate-service-account "$INPUT_GCP_EMAIL" --key-file gcp_token.json
+yes | gcloud auth configure-docker
 
 REPO_NAME=$(basename "$GITHUB_REPOSITORY")
 IMAGE_NAME="${INPUT_IMAGE_NAME:-$REPO_NAME}"
 
 REPO_OWNER=$(dirname "$GITHUB_REPOSITORY")
-IMAGE_PATH="${INPUT_IMAGE_PATH:-$REPO_OWNER}"
+GCP_PROJECT="${INPUT_GCP_PROJECT:-$REPO_OWNER}"
 
-IMAGE_ID="$IMAGE_PATH/$IMAGE_NAME"
+IMAGE_ID="gcr.io/$GCP_PROJECT/$IMAGE_NAME"
 
 INFERRED_IMAGE_TAG=$(basename "$GITHUB_REF")
 if [ "$INFERRED_IMAGE_TAG" = "master" ]

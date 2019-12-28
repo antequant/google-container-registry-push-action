@@ -1,18 +1,14 @@
-name: 'Push Docker image to GitHub Package Registry'
-description: 'Builds, tags, and pushes a Docker image as a GitHub Package associated with the repository'
+name: 'Push Docker image to Google Container Registry'
+description: 'Builds, tags, and pushes a Docker image to Google Container Registry'
 inputs:
-  docker_server:
-    description: 'Server to log into with docker login'
+  gcp_email:
+    description: 'Email account to authenticate with Google Cloud'
     required: true
-    default: 'https://index.docker.io/v1/'
-  docker_username:
-    description: 'Username to log in with using docker login (defaults to $GITHUB_ACTOR)'
-    required: false
-  docker_password:
-    description: 'Password to log in with using docker login'
+  gcp_token:
+    description: 'Full token/credentials file to authenticate to Google Cloud'
     required: true
-  image_path:
-    description: 'Path under which to push the image (defaults to repository owner)'
+  gcp_project:
+    description: 'Google Container Registry project (defaults to repository owner)'
     required: false
   image_name:
     description: 'Unqualified image name to tag (defaults to repository name)'

@@ -1,2 +1,3 @@
-# docker-github-package-action
-GitHub Action to build and push a Docker image to an arbitrary Docker server
+# google-container-registry-push-action
+
+GitHub Action to build and push a Docker image to [Google Container Registry](https://cloud.google.com/container-registry/)
