@@ -1,10 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 set -o errexit
 
 yes 'n' | gcloud init
-cat <<< "$INPUT_GCP_TOKEN" > gcp_token.json
+cat > gcp_token.json <<__EOF__
+$INPUT_GCP_TOKEN
+__EOF__
 
 gcloud auth activate-service-account "$INPUT_GCP_EMAIL" --key-file gcp_token.json
 yes | gcloud auth configure-docker
